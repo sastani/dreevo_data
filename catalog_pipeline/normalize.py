@@ -12,11 +12,12 @@ MAKES = {
 def normalize():
     os.chdir("..")
     cwd = os.getcwd()
-    input_path = cwd + "/data/raw/Uber_Cars.xlsx"
+    input_path = cwd + "/data/Uber_Cars.xlsx"
     wb = openpyxl.load_workbook(input_path, data_only=True)
     ws = wb.active
-    normalize_make(ws)
-    normalize_model(ws)
+    #normalize_make(ws)
+    #normalize_model(ws)
+    normalize_year(ws)
     wb.save(input_path)
 
 def normalize_make(ws):
@@ -72,6 +73,24 @@ def normalize_model(ws):
             model = [token.title() for token in model]
             model = " ".join(model)
         ws.cell(row=row, column=model_col).value = model
+
+def normalize_year(ws):
+    header = [cell.value for cell in ws[1]]
+    vehicle_col = header.index("Vehicle")
+    min_year_col = vehicle_col + 5
+    ws.cell(row=1, column=min_year_col).value = "Minimum Year"
+
+    for row in range(2, ws.max_row + 1):
+        v = ws.cell(row=row, column=vehicle_col + 1).value
+        if not v:
+            continue
+        match = re.search(r'\d{4}', v)
+        if match:
+            year_str = v[match.start():-1]
+            min_year = year_str.split(" ")[0]
+            print(min_year)
+        ws.cell(row=row, column=min_year_col).value = min_year
+
 
 
 def dedup_models():
