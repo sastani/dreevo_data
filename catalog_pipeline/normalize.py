@@ -58,7 +58,7 @@ def normalize_model(ws):
         if not vehicle:
             continue
         vehicle_normalized = vehicle.lower()
-        #remove model from vehicle string
+        #remove make from vehicle string
         start = vehicle_normalized.index(normalized_make)
         end = start + len(normalized_make)
         vehicle = vehicle[end:]
@@ -76,6 +76,12 @@ def normalize_model(ws):
         while last_part in MODEL_POWERTRAINS:
             model_list.pop()
             last_part = model_list[-1]
+        #remove end of model string if make is 'lexus' and it contains all digits
+        if normalized_make == 'lexus':
+            if model_list[-1].isdigit():
+                model_list.pop()
+        elif normalized_make == 'polestar':
+            model_list.insert(0, 'polestar')
         model = [token.title() for token in model_list]
         model = " ".join(model)
         ws.cell(row=row, column=model_col).value = model
