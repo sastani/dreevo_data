@@ -78,7 +78,10 @@ def normalize_model(ws):
             last_part = model_list[-1]
         #remove end of model string if make is 'lexus' and it contains all digits
         if normalized_make == 'lexus':
-            if model_list[-1].isdigit():
+            last_part = model_list[-1]
+            #check if last string in list is 3 digit model number and remove from list if so
+            match = re.search(r'\d{3}', last_part)
+            if match:
                 model_list.pop()
         elif normalized_make == 'polestar':
             model_list.insert(0, 'polestar')
@@ -100,7 +103,6 @@ def normalize_year(ws):
         if match:
             year_str = v[match.start():-1]
             min_year = year_str.split(" ")[0]
-            print(min_year)
         ws.cell(row=row, column=min_year_col).value = min_year
 
 
