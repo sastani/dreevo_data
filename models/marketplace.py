@@ -2,24 +2,11 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 @dataclass
-class Dealer:
-    __table__="dealers"
+class Marketplace:
+    __table__="marketplaces"
     marketcheck_id: str = field(metadata={"json_key": "id"})
     name: str
-    dealer_type: Optional[str]
-    dealership_group_name: Optional[str]
     website: str
-    street: Optional[str]
-    city: str
-    state: str
-    country: str
-    zip: str
-    phone: Optional[str]
-    contact_email: Optional[str] = field(metadata={"json_key": "seller_email"})
-
-    def __post_init__(self):
-        if self.dealer_type:
-            self.dealer_type = self.dealer_type.upper()
 
     @classmethod
     def from_dict(cls, data: dict):

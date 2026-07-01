@@ -17,7 +17,7 @@ def normalize():
     input_path = cwd + "/data/Uber_Cars.xlsx"
     wb = openpyxl.load_workbook(input_path, data_only=True)
     ws = wb.active
-    #normalize_make(ws)
+    normalize_make(ws)
     normalize_model(ws)
     normalize_year(ws)
     wb.save(input_path)
@@ -104,10 +104,5 @@ def normalize_year(ws):
             year_str = v[match.start():-1]
             min_year = year_str.split(" ")[0]
         ws.cell(row=row, column=min_year_col).value = min_year
-
-
-
-def dedup_models():
-    pass
 
 normalize()

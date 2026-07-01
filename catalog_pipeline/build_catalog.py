@@ -2,7 +2,8 @@ import io
 import requests
 import os
 import pandas as pd
-from datetime import datetime
+
+from database import create_table_from_excel
 from utils.get_possible_years import *
 from utils.file_utils import read_file, write_file
 
@@ -68,12 +69,12 @@ def match_and_filter_models():
     uber_df.loc[uber_df['make_copy'] == 'mercedes-benz', 'model_copy'] = uber_df['model_copy'].str.split("-class").str[0]
     # set all values for model_copy in nhtsa df where make is 'mercedes' to string before "-class"
     nhtsa_df.loc[nhtsa_df['make_copy'] == 'mercedes-benz', 'model_copy'] = nhtsa_df['model_copy'].str.split("-class").str[0]
-    uber_df = uber_df[['make', 'make_copy', 'model_copy', 'minimum year', 'uber tier']]
+    uber_df = uber_df[['make', 'make_copy', 'model_copy', 'minimum year', 'uber_tier']]
     nhtsa_df = nhtsa_df[['model', 'make_copy', 'model_copy', 'first_year_produced', 'last_year_produced']]
     merged_df =uber_df.merge(nhtsa_df, how='inner', on=['make_copy', 'model_copy'])
-    filtered_df = merged_df.loc[(merged_df['minimum year'] < merged_df['last_year_produced']) |
-                                (merged_df['minimum year'] == merged_df['last_year_produced'])|
-                                (merged_df['minimum year'] < merged_df['first_year_produced'])].copy()
+    filtered_df = merged_df.loc[(merged_df['minimum_year'] < merged_df['last_year_produced']) |
+                                (merged_df['minimum_year'] == merged_df['last_year_produced'])|
+                                (merged_df['minimum_year'] < merged_df['first_year_produced'])].copy()
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
     filtered_df['model_family'] = None
@@ -88,11 +89,11 @@ def match_and_filter_models():
     has_space_mask = mercedes_class_mask & filtered_df['model'].str.split(" ").str[1].notna()
     filtered_df.loc[no_space_mask, 'model'] = filtered_df['model'].str.split("-").str[0]
     filtered_df.loc[has_space_mask, 'model'] = filtered_df['model'].str.split("-").str[0] + " " + filtered_df['model'].str.split(" ").str[1]
-    filtered_df = filtered_df[['make', 'model_family', 'model', 'minimum year', 'uber tier', 'first_year_produced', 'last_year_produced']]
+    filtered_df = filtered_df[['make', 'model_family', 'model', 'minimum_year', 'uber_tier', 'first_year_produced', 'last_year_produced']]
     #drop duplicate rows for mercedes and bmw
     filtered_df = filtered_df.drop_duplicates()
     filtered_df.to_excel(cwd + "/data/Uber_Model_Production_Years.xlsx", index=False)
 
-
 #build_catalog()
-match_and_filter_models()
+#match_and_filter_models()
+create_table_from_excel("Uber_Model_Production_Years.xlsx", "uber_tiers")
