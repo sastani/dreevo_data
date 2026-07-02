@@ -103,7 +103,7 @@ def init_db(db_path: str = DB_PATH):
             drivetrain           TEXT,
             fuel_type            TEXT,
             engine               TEXT,
-            engine_size          INTEGER,
+            engine_size          FLOAT,
             engine_block         TEXT,
             doors                INTEGER,
             cylinders            INTEGER,

@@ -171,7 +171,6 @@ def fetch_listings():
                     listing_dict["state"] = car_location_dict.get("state")
                     listing_dict["zip"] = car_location_dict.get("zip")
                 else:
-                    dealer_dict = listing_dict.get("dealer")
                     listing_dict["seller_name"] = dealer_dict.get("name")
                     listing_dict["city"] = dealer_dict.get("city")
                     listing_dict["state"] = dealer_dict.get("state")
