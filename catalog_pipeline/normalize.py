@@ -93,8 +93,8 @@ def normalize_year(ws):
     header = [cell.value for cell in ws[1]]
     vehicle_col = header.index("Vehicle")
     min_year_col = vehicle_col + 5
-    ws.cell(row=1, column=min_year_col).value = "Minimum Year"
-
+    ws.cell(row=1, column=min_year_col).value = "Minimum_Year"
+    min_year = None
     for row in range(2, ws.max_row + 1):
         v = ws.cell(row=row, column=vehicle_col + 1).value
         if not v:
