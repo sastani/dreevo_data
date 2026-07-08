@@ -13,7 +13,8 @@ def init_db(db_path: str = DB_PATH):
     cursor = conn.cursor()
     cursor.executescript("""
         CREATE TABLE IF NOT EXISTS raw_marketcheck(
-            marketcheck_id TEXT UNIQUE,
+            id             INTEGER PRIMARY KEY,
+            marketcheck_id TEXT,
             fetched_at     TEXT,
             api_endpoint   TEXT,
             listing_type   TEXT,

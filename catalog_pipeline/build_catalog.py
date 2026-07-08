@@ -69,9 +69,12 @@ def match_and_filter_models():
     uber_df.loc[uber_df['make_copy'] == 'mercedes-benz', 'model_copy'] = uber_df['model_copy'].str.split("-class").str[0]
     # set all values for model_copy in nhtsa df where make is 'mercedes' to string before "-class"
     nhtsa_df.loc[nhtsa_df['make_copy'] == 'mercedes-benz', 'model_copy'] = nhtsa_df['model_copy'].str.split("-class").str[0]
-    uber_df = uber_df[['make', 'make_copy', 'model_copy', 'minimum year', 'uber_tier']]
+    uber_df = uber_df[['make', 'model', 'make_copy', 'model_copy', 'minimum_year', 'uber_tier']]
     nhtsa_df = nhtsa_df[['model', 'make_copy', 'model_copy', 'first_year_produced', 'last_year_produced']]
     merged_df =uber_df.merge(nhtsa_df, how='inner', on=['make_copy', 'model_copy'])
+    merged_df.loc[merged_df['model_x'] == 'Q4 E-Tron', 'model_y'] = 'Q4 e-tron'
+    #rename second model column from nhtsa called 'model_y' to 'model'
+    merged_df.rename(columns={'model_y': 'model'}, inplace=True)
     filtered_df = merged_df.loc[(merged_df['minimum_year'] < merged_df['last_year_produced']) |
                                 (merged_df['minimum_year'] == merged_df['last_year_produced'])|
                                 (merged_df['minimum_year'] < merged_df['first_year_produced'])].copy()
@@ -94,6 +97,7 @@ def match_and_filter_models():
     filtered_df = filtered_df.drop_duplicates()
     filtered_df.to_excel(cwd + "/data/Uber_Model_Production_Years.xlsx", index=False)
 
+
 #build_catalog()
-#match_and_filter_models()
+match_and_filter_models()
 create_table_from_excel("Uber_Model_Production_Years.xlsx", "uber_tiers")
