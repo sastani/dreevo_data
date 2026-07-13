@@ -195,9 +195,9 @@ def fetch_listings():
             listing_objs.append(listing)
             vehicle_build = Vehicle_Build.from_dict(build_dict)
             build_objs.append(vehicle_build)
-        dealer_ids = insert(dealer_objs)
-        build_ids = insert(build_objs)
-        marketplace_ids = insert(marketplace_objs)
+        dealer_ids = upsert(dealer_objs)
+        build_ids = upsert(build_objs)
+        marketplace_ids = upsert(marketplace_objs)
         for i, listing_obj in enumerate(listing_objs):
             listing_obj.dealer_id = dealer_ids[i] if i < len(dealer_ids) else None
             listing_obj.vehicle_build_id = build_ids[i] if i < len(build_ids) else None

@@ -1,0 +1,46 @@
+ CREATE TABLE IF NOT EXISTS listings(
+            id                   INTEGER PRIMARY KEY,
+            marketcheck_id       TEXT UNIQUE,
+            year                 INTEGER,
+            make                 TEXT,
+            model                TEXT,
+            trim                 TEXT,
+            version              TEXT,
+            vin                  TEXT,
+            heading              TEXT,
+            seller_name          TEXT,
+            city                 TEXT,
+            state                TEXT,
+            zip                  INT,
+            region               TEXT,
+            price                REAL,
+            buy_now_price        REAL, -- NULL if a dealer or private party listing
+            mileage              INTEGER,
+            msrp                 REAL,
+            listing_url          TEXT,
+            carfax_1_owner       INTEGER,
+            carfax_clean_title   INTEGER,
+            exterior_color       TEXT,
+            interior_color       TEXT,
+            base_exterior_color       TEXT,
+            base_interior_color       TEXT,
+            days_on_market        INTEGER, -- total days on market since first seen
+            days_on_market_180    INTEGER, -- days active within the last 180-day window
+            days_on_market_active INTEGER, -- days continuously active in current listing period across all channels
+            days_on_site_active   INTEGER, -- days active on the dealer's own website
+            listing_type          TEXT,
+            inventory_type       TEXT,
+            stock_num            TEXT,
+            scraped_at_date      TEXT,
+            in_transit           BOOLEAN,
+            vehicle_status       TEXT,
+            reference_price      REAL,
+            reference_price_date INTEGER,
+            price_change_percent REAL,
+            reference_miles      INTEGER,
+            reference_miles_date INTEGER,
+            source               TEXT,
+            dealer_id            INTEGER REFERENCES dealers(id),
+            marketplace_id       INTEGER REFERENCES marketplaces(id),
+            vehicle_build_id     INTEGER REFERENCES vehicle_builds(id)
+        );
